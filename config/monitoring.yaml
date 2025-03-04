@@ -1,0 +1,82 @@
+# Monitoring Configuration
+metrics:
+  collection:
+    interval: "5m"  # 1m, 5m, 15m, 1h
+    retention_days: 90
+    aggregation_types:
+      - "Average"
+      - "Maximum"
+      - "Minimum"
+      - "Count"
+      - "Total"
+
+  performance:
+    cpu:
+      warning_threshold: 80
+      critical_threshold: 90
+      duration: "15m"
+    memory:
+      warning_threshold: 85
+      critical_threshold: 95
+      duration: "15m"
+    disk:
+      warning_threshold: 85
+      critical_threshold: 95
+      duration: "1h"
+    network:
+      bandwidth_utilization:
+        warning_threshold: 70
+        critical_threshold: 85
+        duration: "15m"
+
+alerts:
+  severity_levels:
+    critical:
+      notification_channels: ["email", "sms", "teams"]
+      auto_ticket: true
+      escalation_after: "30m"
+    warning:
+      notification_channels: ["email", "teams"]
+      auto_ticket: false
+    info:
+      notification_channels: ["email"]
+      auto_ticket: false
+
+  notification_schedule:
+    business_hours:
+      start: "09:00"
+      end: "17:00"
+      timezone: "America/Chicago"
+      channels: ["email", "teams"]
+    after_hours:
+      channels: ["sms", "email"]
+
+health_checks:
+  frequency: "5m"
+  services:
+    - name: "API Endpoints"
+      type: "http"
+      timeout: "30s"
+      failure_threshold: 3
+    - name: "Database"
+      type: "tcp"
+      timeout: "10s"
+      failure_threshold: 2
+    - name: "Storage"
+      type: "azure-storage"
+      timeout: "30s"
+      failure_threshold: 3
+
+logging:
+  level: "INFO"
+  retention_days: 90
+  categories:
+    - "ResourceHealth"
+    - "Administrative"
+    - "Security"
+    - "ServiceHealth"
+    - "Alert"
+  archive:
+    enabled: true
+    storage_account: "logs-archive"
+    retention_years: 7

@@ -315,82 +315,244 @@ api.export_report(
 )
 ```
 
-## 🔄 Automation Examples
+### 5. Advanced Usage Examples
 
-### 1. Scheduled Cost Reports
+#### Resource Tag-Based Analysis
 ```python
-from optimizers.cost.manager import CostManager
+from optimizers.tagging.analyzer import TaggingAnalyzer
 
-# Initialize manager
-manager = CostManager()
+# Initialize analyzer
+analyzer = TaggingAnalyzer()
 
-# Schedule daily cost report
-manager.schedule_cost_report(
-    schedule="0 8 * * *",  # 8 AM daily
-    recipients=["team@company.com"],
-    report_type="DailyCostSummary"
+# Analyze costs by environment tag
+env_costs = analyzer.analyze_costs_by_tag(
+    tag_name="Environment",
+    timeframe="Last3Months",
+    group_by=["ResourceType"]
+)
+
+# Find untagged resources
+untagged = analyzer.find_untagged_resources(
+    required_tags=["Environment", "Department", "Owner"]
+)
+
+# Get tag compliance report
+compliance = analyzer.get_tag_compliance_report(
+    tag_policies={
+        "Environment": ["prod", "dev", "test", "staging"],
+        "Department": ["it", "finance", "marketing"],
+        "CostCenter": r"^\d{4}$"  # regex pattern
+    }
 )
 ```
 
-### 2. Automated Optimization
+#### Advanced Cost Forecasting
 ```python
-from optimizers.scaling.manager import ScalingManager
+from optimizers.forecasting.forecaster import CostForecaster
 
-# Initialize manager
-manager = ScalingManager()
+# Initialize forecaster
+forecaster = CostForecaster()
 
-# Set up auto-scaling rules
-manager.configure_auto_scaling(
-    resource_group="production-rg",
-    vm_scale_set="web-vmss",
-    rules=[
-        {
-            "metric": "CPU",
-            "threshold": 75,
-            "action": "ScaleOut",
-            "increment": 2
-        },
-        {
-            "metric": "CPU",
-            "threshold": 25,
-            "action": "ScaleIn",
-            "decrement": 1
-        }
+# Generate cost forecast with ML model
+forecast = forecaster.predict_costs(
+    forecast_months=6,
+    confidence_interval=0.95,
+    include_seasonality=True,
+    factors=[
+        "historical_trend",
+        "resource_growth",
+        "planned_changes"
     ]
+)
+
+# Get cost anomaly detection
+anomalies = forecaster.detect_anomalies(
+    sensitivity="medium",
+    lookback_period="90d",
+    detection_methods=["statistical", "ml_based"]
 )
 ```
 
-### 3. Alert Configuration
+#### Reserved Instance Optimization
 ```python
-from optimizers.monitoring.manager import MonitoringManager
+from optimizers.reserved_instance.optimizer import RIOptimizer
 
-# Initialize manager
-manager = MonitoringManager()
+# Initialize optimizer
+optimizer = RIOptimizer()
 
-# Configure cost alerts
-manager.set_cost_alerts(
-    budget_amount=10000,
-    alert_thresholds=[50, 75, 90, 100],
-    notification_emails=["finance@company.com"]
+# Get RI recommendations
+ri_recommendations = optimizer.get_ri_recommendations(
+    commitment_term="1_year",
+    payment_option="no_upfront",
+    threshold_hours=700,
+    min_savings_percentage=30
 )
 
-# Configure performance alerts
-manager.set_performance_alerts(
-    rules=[
-        {
-            "metric": "CPU",
-            "threshold": 90,
-            "duration": "5m",
-            "severity": "High"
-        },
-        {
-            "metric": "Memory",
-            "threshold": 85,
-            "duration": "10m",
-            "severity": "Medium"
-        }
-    ]
+# Analyze existing RIs
+ri_analysis = optimizer.analyze_ri_utilization(
+    include_expired=False,
+    lookback_period="90d"
 )
+
+# Get RI purchase plan
+purchase_plan = optimizer.generate_purchase_plan(
+    budget=100000,
+    max_commitment_term="3_years",
+    target_coverage=80,
+    risk_tolerance="medium"
+)
+```
+
+#### Network Cost Optimization
+```python
+from optimizers.network.optimizer import NetworkOptimizer
+
+# Initialize optimizer
+optimizer = NetworkOptimizer()
+
+# Analyze bandwidth costs
+bandwidth_analysis = optimizer.analyze_bandwidth_costs(
+    regions=["eastus", "westus"],
+    timeframe="Last3Months",
+    group_by=["Direction", "ServiceType"]
+)
+
+# Get bandwidth optimization recommendations
+recommendations = optimizer.get_bandwidth_recommendations(
+    min_savings=1000,
+    include_reserved_bandwidth=True,
+    consider_cdn=True
+)
+
+# Analyze ExpressRoute circuits
+expressroute_analysis = optimizer.analyze_expressroute_usage(
+    circuits=["circuit1", "circuit2"],
+    include_redundant_circuits=True,
+    lookback_period="90d"
+)
+```
+
+## 📝 Configuration Examples
+
+The platform uses YAML configuration files for various components. Here are some examples:
+
+### 1. Cost Alerts Configuration
+```yaml
+# config/cost_alerts.yaml
+alerts:
+  budget:
+    monthly:
+      amount: 10000
+      currency: USD
+      thresholds: [50, 75, 90, 100]
+  anomaly:
+    sensitivity: "medium"
+    baseline_period: 30  # days
+
+notifications:
+  email:
+    recipients: ["finance@company.com"]
+  teams:
+    webhook_url: "https://teams.webhook.url"
+```
+
+### 2. Resource Optimization Configuration
+```yaml
+# config/resource_optimization.yaml
+vm_optimization:
+  rightsizing:
+    cpu:
+      underutilized:
+        threshold: 20  # percentage
+        duration: 14  # days
+    memory:
+      underutilized:
+        threshold: 30
+        duration: 14
+
+storage_optimization:
+  unused_resources:
+    disks:
+      unused_threshold_days: 30
+```
+
+### 3. Monitoring Configuration
+```yaml
+# config/monitoring.yaml
+metrics:
+  collection:
+    interval: "5m"
+    retention_days: 90
+  
+  performance:
+    cpu:
+      warning_threshold: 80
+      critical_threshold: 90
+```
+
+## 🔄 Common Workflows
+
+### 1. Monthly Cost Review
+```python
+from optimizers.cost.analyzer import CostAnalyzer
+from optimizers.reporting.generator import ReportGenerator
+
+def monthly_cost_review():
+    # Get cost analysis
+    analyzer = CostAnalyzer()
+    costs = analyzer.get_cost_trends(timeframe="LastMonth")
+    
+    # Generate report
+    generator = ReportGenerator()
+    report = generator.create_monthly_report(
+        cost_data=costs,
+        include_sections=[
+            "executive_summary",
+            "cost_breakdown",
+            "savings_opportunities",
+            "recommendations"
+        ],
+        format="pdf"
+    )
+    
+    # Send report
+    generator.distribute_report(
+        report_path=report.path,
+        recipients=["stakeholders@company.com"],
+        include_dashboard_link=True
+    )
+```
+
+### 2. Weekly Resource Optimization
+```python
+from optimizers.vm.optimizer import VMOptimizer
+from optimizers.storage.optimizer import StorageOptimizer
+from optimizers.reporting.generator import ReportGenerator
+
+def weekly_optimization():
+    # VM optimization
+    vm_opt = VMOptimizer()
+    vm_recommendations = vm_opt.get_rightsizing_recommendations()
+    
+    # Storage optimization
+    storage_opt = StorageOptimizer()
+    storage_recommendations = storage_opt.get_tier_recommendations()
+    
+    # Generate and send report
+    generator = ReportGenerator()
+    report = generator.create_optimization_report(
+        vm_recommendations=vm_recommendations,
+        storage_recommendations=storage_recommendations,
+        format="excel",
+        include_savings_summary=True
+    )
+    
+    # Implement high-confidence recommendations
+    vm_opt.apply_recommendations(
+        recommendations=vm_recommendations,
+        confidence_threshold=0.9,
+        require_approval=True
+    )
 ```
 
 ## 🔐 Security Best Practices

@@ -1,0 +1,46 @@
+# Cost Alert Configuration
+alerts:
+  budget:
+    # Monthly budget alerts
+    monthly:
+      amount: 10000
+      currency: USD
+      thresholds:
+        - percentage: 50
+          notify: ["email", "teams"]
+        - percentage: 75
+          notify: ["email", "teams", "sms"]
+        - percentage: 90
+          notify: ["email", "teams", "sms"]
+        - percentage: 100
+          notify: ["email", "teams", "sms", "webhook"]
+    
+    # Daily spend alerts
+    daily:
+      threshold: 500
+      currency: USD
+      comparison_type: "moving_average"
+      window_days: 7
+
+  anomaly:
+    # Anomaly detection settings
+    sensitivity: "medium"  # low, medium, high
+    baseline_period: 30  # days
+    detection_methods:
+      - "statistical"
+      - "machine_learning"
+
+notifications:
+  email:
+    recipients:
+      - "finance@company.com"
+      - "cloud-team@company.com"
+  teams:
+    webhook_url: "https://teams.webhook.url"
+  sms:
+    phone_numbers:
+      - "+1234567890"
+  webhook:
+    url: "https://your-webhook.com/alert"
+    headers:
+      Authorization: "Bearer your-token"
