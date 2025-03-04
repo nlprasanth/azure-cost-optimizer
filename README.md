@@ -44,7 +44,20 @@ A comprehensive cloud cost management solution that analyzes Azure resources to 
 - Git (for cloning the repository)
 - pip (Python package manager)
 
-## 🔑 Setup Instructions
+## 🔧 Quick Setup
+
+### Windows
+```bash
+setup.bat
+```
+
+### Linux/Mac
+```bash
+chmod +x setup.sh
+./setup.sh
+```
+
+## 🔑 Detailed Setup Instructions
 
 ### 1. Clone the Repository
 ```bash
@@ -172,6 +185,213 @@ cd azure-cost-optimizer
   - Network throughput
   - Storage IOPS
   - Response times
+
+## 💡 Usage Examples
+
+### 1. Cost Analysis Examples
+
+#### View Monthly Cost Trends
+```python
+from optimizers.cost.analyzer import CostAnalyzer
+
+# Initialize analyzer
+analyzer = CostAnalyzer()
+
+# Get monthly costs for last 6 months
+costs = analyzer.get_cost_trends(
+    timeframe="Last6Months",
+    granularity="Monthly",
+    group_by=["ResourceType"]
+)
+
+# View top spending categories
+top_costs = analyzer.get_top_spending_resources(limit=5)
+```
+
+#### Budget Analysis
+```python
+from optimizers.budget.analyzer import BudgetAnalyzer
+
+# Initialize analyzer
+analyzer = BudgetAnalyzer()
+
+# Check budget compliance
+compliance = analyzer.check_budget_compliance(
+    budget_amount=5000,
+    timeframe="CurrentMonth"
+)
+
+# Get forecasted overages
+forecast = analyzer.forecast_budget_overages(
+    months_ahead=3
+)
+```
+
+### 2. Resource Optimization Examples
+
+#### VM Optimization
+```python
+from optimizers.vm.optimizer import VMOptimizer
+
+# Initialize optimizer
+optimizer = VMOptimizer()
+
+# Get right-sizing recommendations
+recommendations = optimizer.get_rightsizing_recommendations(
+    min_cpu_threshold=20,
+    min_memory_threshold=30,
+    lookback_days=30
+)
+
+# Find spot instance opportunities
+spot_opportunities = optimizer.find_spot_opportunities(
+    max_interruption_rate=10,
+    min_savings_percentage=50
+)
+```
+
+#### Storage Optimization
+```python
+from optimizers.storage.optimizer import StorageOptimizer
+
+# Initialize optimizer
+optimizer = StorageOptimizer()
+
+# Find unused disks
+unused_disks = optimizer.find_unused_disks(
+    unused_days=30
+)
+
+# Get tier optimization recommendations
+tier_recommendations = optimizer.get_tier_recommendations(
+    min_savings=100  # in dollars
+)
+```
+
+### 3. Performance Monitoring Examples
+
+#### Resource Health Monitoring
+```python
+from optimizers.monitoring.analyzer import MonitoringAnalyzer
+
+# Initialize analyzer
+analyzer = MonitoringAnalyzer()
+
+# Get resource health status
+health_status = analyzer.get_resource_health(
+    resource_types=["Microsoft.Compute/virtualMachines"],
+    timeframe="Last24Hours"
+)
+
+# Get performance metrics
+metrics = analyzer.get_performance_metrics(
+    metric_names=["CPU", "Memory", "Network"],
+    aggregation="Average",
+    interval="5m"
+)
+```
+
+### 4. Dashboard Examples
+
+#### Custom Reporting
+```python
+from dashboard.api import DashboardAPI
+
+# Initialize dashboard
+api = DashboardAPI()
+
+# Create custom cost report
+report = api.create_cost_report(
+    timeframe="LastMonth",
+    group_by=["ResourceGroup", "Tags"],
+    metrics=["ActualCost", "AmortizedCost"]
+)
+
+# Export report
+api.export_report(
+    report_id=report.id,
+    format="excel",
+    destination="path/to/report.xlsx"
+)
+```
+
+## 🔄 Automation Examples
+
+### 1. Scheduled Cost Reports
+```python
+from optimizers.cost.manager import CostManager
+
+# Initialize manager
+manager = CostManager()
+
+# Schedule daily cost report
+manager.schedule_cost_report(
+    schedule="0 8 * * *",  # 8 AM daily
+    recipients=["team@company.com"],
+    report_type="DailyCostSummary"
+)
+```
+
+### 2. Automated Optimization
+```python
+from optimizers.scaling.manager import ScalingManager
+
+# Initialize manager
+manager = ScalingManager()
+
+# Set up auto-scaling rules
+manager.configure_auto_scaling(
+    resource_group="production-rg",
+    vm_scale_set="web-vmss",
+    rules=[
+        {
+            "metric": "CPU",
+            "threshold": 75,
+            "action": "ScaleOut",
+            "increment": 2
+        },
+        {
+            "metric": "CPU",
+            "threshold": 25,
+            "action": "ScaleIn",
+            "decrement": 1
+        }
+    ]
+)
+```
+
+### 3. Alert Configuration
+```python
+from optimizers.monitoring.manager import MonitoringManager
+
+# Initialize manager
+manager = MonitoringManager()
+
+# Configure cost alerts
+manager.set_cost_alerts(
+    budget_amount=10000,
+    alert_thresholds=[50, 75, 90, 100],
+    notification_emails=["finance@company.com"]
+)
+
+# Configure performance alerts
+manager.set_performance_alerts(
+    rules=[
+        {
+            "metric": "CPU",
+            "threshold": 90,
+            "duration": "5m",
+            "severity": "High"
+        },
+        {
+            "metric": "Memory",
+            "threshold": 85,
+            "duration": "10m",
+            "severity": "Medium"
+        }
+    ]
+)
+```
 
 ## 🔐 Security Best Practices
 
